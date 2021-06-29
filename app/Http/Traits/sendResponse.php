@@ -2,7 +2,7 @@
 
 namespace App\Http\Traits;
 
-Trait sendResponse
+Trait SendResponse
 {
     // This function send the data if the request has been successful
     public function sendResponseData($result, $message, $code)

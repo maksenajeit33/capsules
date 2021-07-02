@@ -20,7 +20,7 @@ class VerificationController extends MailController
     {
         // Validate the request
         $validator = Validator::make($request->all(), [
-            'code' => 'required|numeric|between:100000,999999'
+            'code' => 'required|numeric|between:1000,9999'
         ]);
 
         // Check from any errors

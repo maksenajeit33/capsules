@@ -28,11 +28,11 @@ Trait SendResponse
     }
 
     // This function send an error or more if the request has been failed
-    public function sendResponseError($error, $errorMessage = [], $code)
+    public function sendResponseError($message, $errorMessage = [], $code)
     {
         $response = [
             'status' => false,
-            'message' => $error,
+            'message' => $message,
         ];
 
         if(!empty($errorMessage))

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\VerificationController;
 use App\Http\Controllers\API\ForgetPasswordController;
+use App\Http\Controllers\API\ResetPAsswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,8 @@ Route::prefix('user')->namespace('API')->middleware('api_key')->group(function (
         // This Routes are for forget password
         Route::post('email/forget/message', [ForgetPasswordController::class, 'emailForgetMessage']);
         Route::post('email/forget/code', [ForgetPasswordController::class, 'emailForgetCode']);
+        // This route is for change the password
+        Route::post('password/reset', [ResetPAsswordController::class, 'resetPassword']);
     });
 
     Route::middleware('auth:api')->group(function () {
@@ -35,5 +38,7 @@ Route::prefix('user')->namespace('API')->middleware('api_key')->group(function (
         // This Routes are for register verification code
         Route::post('email/verify/register', [VerificationController::class, 'emailRegisterVerify']);
         Route::post('email/verify/code', [VerificationController::class, 'codeSendVerify']);
+        // This route is for reset the password
+        Route::post('password/change', [ResetPAsswordController::class, 'changetPassword']);
     });
 });

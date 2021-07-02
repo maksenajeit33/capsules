@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\VerificationController;
+use App\Http\Controllers\API\ForgetPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,9 @@ Route::prefix('user')->namespace('API')->middleware('api_key')->group(function (
     Route::middleware('guest:api')->group(function () {
         Route::post('register', [AuthController::class, 'register']);
         Route::post('login', [AuthController::class, 'login']);
+        // This Routes are for forget password
+        Route::post('email/forget/message', [ForgetPasswordController::class, 'emailForgetMessage']);
+        Route::post('email/forget/code', [ForgetPasswordController::class, 'emailForgetCode']);
     });
 
     Route::middleware('auth:api')->group(function () {

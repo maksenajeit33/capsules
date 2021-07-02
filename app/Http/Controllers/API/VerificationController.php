@@ -28,7 +28,7 @@ class VerificationController extends MailController
             return $this->sendResponseError('Please validate the errors', $validator->errors(), 400);
 
         // Read the data from DB
-        $user = User::where('id', Auth::id())->first();
+        $user = User::where('id', Auth::guard('api')->id())->first();
 
         // Check if the email is already verified
         if($user->email_verified_at)

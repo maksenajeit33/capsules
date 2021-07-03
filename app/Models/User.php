@@ -42,4 +42,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // Get capsules count that belong to the user
+    public function capsules()
+    {
+        return $this->hasMany(Capsule::class, 'user_id');
+    }
 }

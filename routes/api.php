@@ -6,6 +6,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\VerificationController;
 use App\Http\Controllers\API\ForgetPasswordController;
 use App\Http\Controllers\API\ResetPAsswordController;
+use App\Http\Controllers\API\CapsuleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,5 +41,7 @@ Route::prefix('user')->namespace('API')->middleware('api_key')->group(function (
         Route::post('email/verify/code', [VerificationController::class, 'codeSendVerify']);
         // This route is for reset the password
         Route::post('password/change', [ResetPAsswordController::class, 'changetPassword']);
+        // This route is for increase the number of capsules
+        Route::post('capsules/plus', [CapsuleController::class, 'capsulesPlus']);
     });
 });

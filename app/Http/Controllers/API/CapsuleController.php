@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class CapsuleController extends Controller
 {
@@ -52,7 +53,7 @@ class CapsuleController extends Controller
     // Create capsules count
     protected function create($capsules_count, $date, $user_id)
     {
-        // Create
+        // Create row for current day
         $value = [
             'capsules_count' => $capsules_count,
             'user_id' => $user_id,
@@ -62,5 +63,135 @@ class CapsuleController extends Controller
 
         // Send response
         return $this->sendResponseMessage('Increase added', 200);
+    }
+
+    // THE REPORT
+    public function capsulesReport()
+    {
+        // Get the current date as 'dd'
+        $today = Carbon::now()->isoFormat('dd');
+
+        // Create a week map
+        $weekMap = [
+            'Sa' => 0,
+            'Su' => -1,
+            'Mo' => -2,
+            'Tu' => -3,
+            'We' => -4,
+            'Th' => -5,
+            'Fr' => -6,
+        ];
+
+        // Get number of this day ad negative
+        $dayNumber = $weekMap[$today];
+
+        // Get report of the days, weeks and months
+        $reportDays = $this->reportDays(Auth::guard('api')->id());
+        $reportWeeks = $this->reportWeeks(Auth::guard('api')->id(), $dayNumber);
+        $reportMonths = $this->reportMonths(Auth::guard('api')->id());
+
+        // Return the response
+        return response()->json([
+            'sum of today' => $reportDays['sumOfThisDay'],
+            'sum of yesterday' => $reportDays['sumOfLastDay'],
+            'sum of this week' => $reportWeeks['sumOfThisWeek'],
+            'sum of last week' => $reportWeeks['sumOfLastWeek'],
+            'sum of this month' => $reportMonths['sumOfThisMonth'],
+            'sum of last month' => $reportMonths['sumOfLastMonth'],
+        ]);
+    }
+
+    // REPORT OF TODAY AND YESTERDAY
+    protected function reportDays($user_id)
+    {
+        // Get this day and yesterday
+        $thisDay = Carbon::now();
+        $lastDay = Carbon::yesterday();
+
+        // Read the data from DB - get the capsules count of this day
+        $countThisDay = Capsule::select('capsules_count')->where('user_id', $user_id)
+            ->where('date', $thisDay->format('Y/m/d'))->first();
+
+        // Read the data from DB - get the capsules count of yesterday
+        $countLastDay = Capsule::select('capsules_count')->where('user_id', $user_id)
+            ->where('date', $lastDay->format('Y/m/d'))->first();
+
+        // Return the report
+        $reportDays = [
+            'sumOfThisDay' => $countThisDay->capsules_count,
+            'sumOfLastDay' => $countLastDay->capsules_count,
+        ];
+        return $reportDays;
+    }
+
+    // REPORT OF CURRENT AND LAST WEEK
+    protected function reportWeeks($user_id, $dayNumber)
+    {
+        // Get first and current day of this week
+        $fisrtDayOfThisWeek = Carbon::now()->addDays($dayNumber);
+        $CurrentDayOfThisWeek = Carbon::now();
+
+        // Get first and last day of last week
+        $lastDayOfLastWeek = Carbon::now()->addDays($dayNumber)->add(-1, 'day');
+        $firstDayOfLastWeek = Carbon::now()->addDays($dayNumber)->add(-7, 'day');
+
+        // Read the data from DB - get the capsules count of this week
+        $countThisWeek = Capsule::where('user_id', $user_id)
+            ->whereBetween('date', [$fisrtDayOfThisWeek->format('Y/m/d'), $CurrentDayOfThisWeek->format('Y/m/d')])->get();
+
+        // Read the data from DB - get the capsules count of last week
+        $countLastWeek = Capsule::where('user_id', $user_id)
+            ->whereBetween('date', [$firstDayOfLastWeek->format('Y/m/d'), $lastDayOfLastWeek->format('Y/m/d')])->get();
+
+        // To count the capsules of weeks
+        $sumThisWeek = 0;
+        $sumLastWeek = 0;
+
+        // Counting the capsules of this week
+        foreach($countThisWeek as $item) {
+            $sumThisWeek += $item->capsules_count;
+        }
+
+        // Counting the capsules of last week
+        foreach($countLastWeek as $item) {
+            $sumLastWeek += $item->capsules_count;
+        }
+
+        // Return the report
+        $reportWeeks = [
+            'sumOfThisWeek' => $sumThisWeek,
+            'sumOfLastWeek' => $sumLastWeek
+        ];
+        return $reportWeeks;
+    }
+
+    // REPORT OF CURRENT AND LAST MONTH
+    protected function reportMonths($user_id)
+    {
+        // Get current and last month
+        $thisMonth = Carbon::now()->format('m');
+        $lastMonth = Carbon::now()->addMonth(-1)->format('m');
+
+        // Read the data from DB - get the capsules count of current and last month
+        $countThisMonth = DB::select('SELECT `capsules_count` FROM `capsules` WHERE DATE_FORMAT(`date`, "%m") = '.$thisMonth.' AND `user_id` = '.$user_id);
+        $countLastMonth = DB::select('SELECT `capsules_count` FROM `capsules` WHERE DATE_FORMAT(`date`, "%m") = '.$lastMonth.' AND `user_id` = '.$user_id);
+
+        // To count the capsules of weeks
+        $sumThisMonth = 0;
+        $sumLastMonth = 0;
+
+        // Counting the capsules of current and last month
+        foreach($countThisMonth as $item)
+            $sumThisMonth += $item->capsules_count;
+
+        foreach($countLastMonth as $item)
+            $sumLastMonth += $item->capsules_count;
+
+        // Return the response
+        $reportMonths = [
+            'sumOfThisMonth' => $sumThisMonth,
+            'sumOfLastMonth' => $sumLastMonth
+        ];
+        return $reportMonths;
     }
 }

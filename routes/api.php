@@ -41,7 +41,8 @@ Route::prefix('user')->namespace('API')->middleware('api_key')->group(function (
         Route::post('email/verify/code', [VerificationController::class, 'codeSendVerify']);
         // This route is for reset the password
         Route::post('password/change', [ResetPAsswordController::class, 'changetPassword']);
-        // This route is for increase the number of capsules
+        // This route is for increase the number of capsules and get the report
         Route::post('capsules/plus', [CapsuleController::class, 'capsulesPlus']);
+        Route::get('capsules/report', [CapsuleController::class, 'capsulesReport']);
     });
 });

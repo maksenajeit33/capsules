@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Traits\SendResponse;
+use App\Http\Traits\sendMessage;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ResetPAsswordController extends Controller
 {
-    use SendResponse;
+    use sendMessage;
 
     // RESET PASSWORD
     public function resetPassword(Request $request)
@@ -26,7 +26,7 @@ class ResetPAsswordController extends Controller
 
         // Check from any errors in the request
         if($validator->fails())
-            return $this->sendResponseError('Please validate the error', $validator->errors(), 400);
+            return $this->sendResponseError('something went wrong', $validator->errors(), 400);
 
         // Read the data from DB
         $user = User::where('email', $request->email)->first();
@@ -40,7 +40,7 @@ class ResetPAsswordController extends Controller
         $result['token'] = $user->createToken('user@user')->accessToken;
 
         // Send the response
-        return $this->sendResponseData($result, 'Password reset successful', 202);
+        return $this->sendResponseData($result, 'password reset success', 202);
     }
 
     public function changetPassword(Request $request)
@@ -54,7 +54,7 @@ class ResetPAsswordController extends Controller
 
         // Check from any errors in the request
         if($validator->fails())
-            return $this->sendResponseError('Please validate the errors', $validator->errors(), 400);
+            return $this->sendResponseError('something went wrong', $validator->errors(), 400);
 
         // Read the data from DB
         $user = User::where('id', Auth::guard('api')->id())->first();
@@ -72,6 +72,6 @@ class ResetPAsswordController extends Controller
         $result['token'] = $user->createToken('user@user')->accessToken;
 
         // Send the response
-        return $this->sendResponseData($result, 'Password change successful', 202);
+        return $this->sendResponseData($result, 'password change success', 202);
     }
 }

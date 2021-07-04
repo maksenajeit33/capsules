@@ -27,7 +27,7 @@ class AuthController extends MailController
 
         // Check from errors in the validation
         if($validator->fails())
-            return $this->sendResponseError('Please validate the errors', $validator->errors(), 400);
+            return $this->sendResponseError('register failed', $validator->errors(), 400);
 
         // Get a generate number to send it in email and stored in DB
         $code = $this->generate();
@@ -44,7 +44,7 @@ class AuthController extends MailController
         $this->mailRegistrationVerify($user->name, $user->email, $code, $request->api_key);
 
         // Send the response
-        return $this->sendResponseData($result, 'Please confirm your email address', 202);
+        return $this->sendResponseData($result, 'register success', 202);
     }
 
     // LOGIN USER
@@ -58,7 +58,7 @@ class AuthController extends MailController
 
         // Check from errors in the validation
         if($validator->fails())
-            return $this->sendResponseError('Please validate the errors', $validator->errors(), 400);
+            return $this->sendResponseError('login failed', $validator->errors(), 400);
 
         // Read the data from database
         $value = $request->all();
@@ -66,7 +66,7 @@ class AuthController extends MailController
 
         // Check from the password
         if(!Hash::check($value['password'], $user->password))
-            return $this->sendResponseError('Login Failed', '', 406);
+            return $this->sendResponseError('login failed', '', 406);
 
         // Create token
         $result['name'] = $user->name;
@@ -74,10 +74,10 @@ class AuthController extends MailController
 
         // Set a message to send it to user
         if($user->hasVerifiedEmail()) {
-            $message = 'Login Successful';
+            $message = 'login success';
             $code = 202;
         } else {
-            $message = 'Email must be verify';
+            $message = 'email not verify';
             $code = 403;
         }
 
@@ -96,6 +96,6 @@ class AuthController extends MailController
         $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($request->user()->token()->id);
 
         // Send the response
-        return $this->sendResponseMessage('Logout Successful', 200);
+        return $this->sendResponseMessage('logout success', 200);
     }
 }

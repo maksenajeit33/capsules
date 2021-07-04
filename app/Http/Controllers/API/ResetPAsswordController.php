@@ -67,11 +67,7 @@ class ResetPAsswordController extends Controller
         $user->password = Hash::make($request->new_password);
         $user->save();
 
-        // Create the token
-        $result['name'] = $user->name;
-        $result['token'] = $user->createToken('user@user')->accessToken;
-
         // Send the response
-        return $this->sendResponseData($result, 'password change success', 202);
+        return $this->sendResponseMessage('password change success', 202);
     }
 }

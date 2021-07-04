@@ -88,7 +88,7 @@ class CapsuleController extends Controller
         // Get report of the days, weeks and months
         $reportDays = $this->reportDays(Auth::guard('api')->id());
         $reportWeeks = $this->reportWeeks(Auth::guard('api')->id(), $dayNumber);
-        $reportMonths = $this->reportMonths(Auth::guard('api')->id());
+        // $reportMonths = $this->reportMonths(Auth::guard('api')->id());
 
         // Return the response
         return response()->json([
@@ -96,8 +96,8 @@ class CapsuleController extends Controller
             'sum of yesterday' => $reportDays['sumOfLastDay'],
             'sum of this week' => $reportWeeks['sumOfThisWeek'],
             'sum of last week' => $reportWeeks['sumOfLastWeek'],
-            'sum of this month' => $reportMonths['sumOfThisMonth'],
-            'sum of last month' => $reportMonths['sumOfLastMonth'],
+            // 'sum of this month' => $reportMonths['sumOfThisMonth'],
+            // 'sum of last month' => $reportMonths['sumOfLastMonth'],
         ]);
     }
 

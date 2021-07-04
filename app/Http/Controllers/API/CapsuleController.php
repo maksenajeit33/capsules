@@ -180,12 +180,19 @@ class CapsuleController extends Controller
         $thisMonth = Carbon::now()->format('m');
         $lastMonth = Carbon::now()->addMonth(-1)->format('m');
 
-        // Read the data from DB - get the capsules count of current and last month
-        // $countThisMonth = DB::select('SELECT `capsules_count` FROM `capsules` WHERE DATE_FORMAT(`date`, "%m") = '.$thisMonth.' AND `user_id` = '.$user_id);
-        // $countLastMonth = DB::select('SELECT `capsules_count` FROM `capsules` WHERE DATE_FORMAT(`date`, "%m") = '.$lastMonth.' AND `user_id` = '.$user_id);
+        $startOfThisMonth = Carbon::now()->startOfMonth();
+        $endOfThisMonth = Carbon::now()->endOfMonth();
 
-        $countThisMonth = DB::select('SELECT capsules_count FROM `capsules` WHERE TO_DATE(date, "MM") = ' . $thisMonth . ' AND user_id = ' . $user_id);
-        $countLastMonth = DB::select('SELECT capsules_count FROM `capsules` WHERE TO_DATE(date, "MM") = ' . $lastMonth . ' AND user_id = ' . $user_id);
+        $startOfLastMonth = Carbon::now()->addMonth(-1)->startOfMonth();
+        $endOfLastMonth = Carbon::now()->addMonth(-1)->endOfMonth();
+
+        // Read the data from DB - get the capsules count of this month
+        $countThisMonth = Capsule::where('user_id', $user_id)
+            ->whereBetween('date', [$startOfThisMonth->format('Y/m/d'), $endOfThisMonth->format('Y/m/d')])->get();
+
+        // Read the data from DB - get the capsules count of last month
+        $countLastMonth = Capsule::where('user_id', $user_id)
+            ->whereBetween('date', [$startOfLastMonth->format('Y/m/d'), $endOfLastMonth->format('Y/m/d')])->get();
 
         // To count the capsules of weeks
         $sumThisMonth = 0;

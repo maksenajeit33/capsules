@@ -184,8 +184,8 @@ class CapsuleController extends Controller
         // $countThisMonth = DB::select('SELECT `capsules_count` FROM `capsules` WHERE DATE_FORMAT(`date`, "%m") = '.$thisMonth.' AND `user_id` = '.$user_id);
         // $countLastMonth = DB::select('SELECT `capsules_count` FROM `capsules` WHERE DATE_FORMAT(`date`, "%m") = '.$lastMonth.' AND `user_id` = '.$user_id);
 
-        $countThisMonth = DB::select('SELECT capsules_count FROM `capsules` WHERE DATE_FORMAT(date, "%m") = ' . $thisMonth . ' AND user_id = ' . $user_id);
-        $countLastMonth = DB::select('SELECT capsules_count FROM `capsules` WHERE DATE_FORMAT(date, "%m") = ' . $lastMonth . ' AND user_id = ' . $user_id);
+        $countThisMonth = DB::select('SELECT capsules_count FROM `capsules` WHERE TO_DATE(date, "MM") = ' . $thisMonth . ' AND user_id = ' . $user_id);
+        $countLastMonth = DB::select('SELECT capsules_count FROM `capsules` WHERE TO_DATE(date, "MM") = ' . $lastMonth . ' AND user_id = ' . $user_id);
 
         // To count the capsules of weeks
         $sumThisMonth = 0;

@@ -174,15 +174,18 @@ class CapsuleController extends Controller
     }
 
     // REPORT OF CURRENT AND LAST MONTH
-   /* protected function reportMonths($user_id)
+    protected function reportMonths($user_id)
     {
         // Get current and last month
         $thisMonth = Carbon::now()->format('m');
         $lastMonth = Carbon::now()->addMonth(-1)->format('m');
 
         // Read the data from DB - get the capsules count of current and last month
-        $countThisMonth = DB::select('SELECT `capsules_count` FROM `capsules` WHERE DATE_FORMAT(`date`, "%m") = '.$thisMonth.' AND `user_id` = '.$user_id);
-        $countLastMonth = DB::select('SELECT `capsules_count` FROM `capsules` WHERE DATE_FORMAT(`date`, "%m") = '.$lastMonth.' AND `user_id` = '.$user_id);
+        // $countThisMonth = DB::select('SELECT `capsules_count` FROM `capsules` WHERE DATE_FORMAT(`date`, "%m") = '.$thisMonth.' AND `user_id` = '.$user_id);
+        // $countLastMonth = DB::select('SELECT `capsules_count` FROM `capsules` WHERE DATE_FORMAT(`date`, "%m") = '.$lastMonth.' AND `user_id` = '.$user_id);
+
+        $countThisMonth = DB::select('SELECT capsules_count FROM `capsules` WHERE DATE_FORMAT(date, "%m") = ' . $thisMonth . ' AND user_id = ' . $user_id);
+        $countLastMonth = DB::select('SELECT capsules_count FROM `capsules` WHERE DATE_FORMAT(date, "%m") = ' . $lastMonth . ' AND user_id = ' . $user_id);
 
         // To count the capsules of weeks
         $sumThisMonth = 0;
@@ -201,5 +204,5 @@ class CapsuleController extends Controller
             'sumOfLastMonth' => $sumLastMonth
         ];
         return $reportMonths;
-    } */
+    }
 }

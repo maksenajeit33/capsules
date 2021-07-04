@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\MailController;
-use App\Http\Traits\SendResponse;
+use App\Http\Traits\sendMessage;
 use App\Http\Traits\VerifyCode;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ use Carbon\Carbon;
 
 class VerificationController extends MailController
 {
-    use VerifyCode, SendResponse;
+    use VerifyCode, sendMessage;
 
     // VERIFICATION THE EMAIL ADDRESS
     public function emailRegisterVerify(Request $request)

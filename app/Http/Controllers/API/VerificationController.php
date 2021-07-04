@@ -25,7 +25,7 @@ class VerificationController extends MailController
 
         // Check from any errors
         if($validator->fails())
-            return $this->sendResponseError('Please validate the errors', $validator->errors(), 400);
+            return $this->sendResponseError('verification failed', $validator->errors(), 400);
 
         // Read the data from DB
         $user = User::where('id', Auth::guard('api')->id())->first();
@@ -43,7 +43,7 @@ class VerificationController extends MailController
         $user->save();
 
         // Send a message
-        return $this->sendResponseMessage('Verified successful', 202);
+        return $this->sendResponseMessage('verification success', 202);
     }
 
     // SEND A VERIFICATION CODE
@@ -63,6 +63,6 @@ class VerificationController extends MailController
         $user->save();
 
         // Send a message
-        return $this->sendResponseMessage('Code sent successful', 200);
+        return $this->sendResponseMessage('code sent success', 200);
     }
 }

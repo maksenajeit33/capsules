@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends MailController
 {
-    use SendResponse, VerifyCode;
+    use SendResponse;
 
     // REGISTER USER
     public function register(Request $request)

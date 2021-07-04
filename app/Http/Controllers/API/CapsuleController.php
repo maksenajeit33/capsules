@@ -116,10 +116,18 @@ class CapsuleController extends Controller
         $countLastDay = Capsule::select('capsules_count')->where('user_id', $user_id)
             ->where('date', $lastDay->format('Y/m/d'))->first();
 
+        if($countThisDay)
+            $sumOfThisDay = $countThisDay->capsules_count;
+        else $sumOfThisDay = 0;
+
+        if($countLastDay)
+            $sumOfLastDay = $countLastDay->capsules_count;
+        else $sumOfLastDay = 0;
+
         // Return the report
         $reportDays = [
-            'sumOfThisDay' => $countThisDay->capsules_count,
-            'sumOfLastDay' => $countLastDay->capsules_count,
+            'sumOfThisDay' => $sumOfThisDay,
+            'sumOfLastDay' => $sumOfLastDay,
         ];
         return $reportDays;
     }

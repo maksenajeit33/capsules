@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\MailController;
-use App\Http\Traits\SendResponse;
+use App\Http\Traits\sendMessage;
 use App\Http\Traits\VerifyCode;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends MailController
 {
-    use SendResponse;
+    use sendMessage;
 
     // REGISTER USER
     public function register(Request $request)

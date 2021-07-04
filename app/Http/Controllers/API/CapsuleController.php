@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Traits\SendResponse;
+use App\Http\Traits\sendMessage;
 use App\Models\Capsule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class CapsuleController extends Controller
 {
-    use SendResponse;
+    use sendMessage;
 
     // THIS METHOD IS FOR INCREASE THE CAPSULES
     public function capsulesPlus(Request $request)

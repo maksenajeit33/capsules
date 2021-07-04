@@ -174,7 +174,7 @@ class CapsuleController extends Controller
     }
 
     // REPORT OF CURRENT AND LAST MONTH
-    protected function reportMonths($user_id)
+   /* protected function reportMonths($user_id)
     {
         // Get current and last month
         $thisMonth = Carbon::now()->format('m');
@@ -201,5 +201,5 @@ class CapsuleController extends Controller
             'sumOfLastMonth' => $sumLastMonth
         ];
         return $reportMonths;
-    }
+    } */
 }

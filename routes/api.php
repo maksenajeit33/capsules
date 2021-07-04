@@ -23,7 +23,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('user')->namespace('API')->middleware('api_key')->group(function () {
+Route::prefix('v1/user')->namespace('API')->middleware('api_key')->group(function () {
     Route::middleware('guest:api')->group(function () {
         Route::post('register', [AuthController::class, 'register']);
         Route::post('login', [AuthController::class, 'login']);

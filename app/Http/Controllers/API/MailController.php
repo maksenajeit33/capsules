@@ -17,11 +17,11 @@ class MailController extends Controller
             'code' => $code,
         ];
 
-        if($api_key == env("API_KEY_N")) {
+        if($api_key == "45reg4rhe54bgr4eryki58fqz5f5t") {
             $details['logo'] = asset('images/logo_n.png');
             $details['team'] = 'Capsule application team';
             $details['app'] = 'Capsule';
-        } else if($api_key == env("API_KEY_O")) {
+        } else if($api_key == "5c4e878thbg5n4j54ii7sx4q5xad4") {
             $details['logo'] = asset('images/logo_o.png');
             $details['team'] = 'TG Focus application team';
             $details['app'] = 'TG Focus';
@@ -38,11 +38,11 @@ class MailController extends Controller
             'code' => $code,
         ];
 
-        if($api_key == env("API_KEY_N")) {
+        if($api_key == "45reg4rhe54bgr4eryki58fqz5f5t") {
             $details['logo'] = asset('images/logo_n.png');
             $details['team'] = 'Capsule application team';
             $details['app'] = 'Capsule';
-        } else if($api_key == env("API_KEY_O")) {
+        } else if($api_key == "5c4e878thbg5n4j54ii7sx4q5xad4") {
             $details['logo'] = asset('images/logo_o.png');
             $details['team'] = 'TG Focus application team';
             $details['app'] = 'TG Focus';

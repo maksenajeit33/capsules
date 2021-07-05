@@ -24,7 +24,7 @@ class ForgetPasswordController extends MailController
 
         // Check from any error in validation
         if($validator->fails())
-            return $this->sendResponseError('something went wrong', $validator->errors(), 400);
+            return $this->sendResponseError('Bad Request', $validator->errors(), 400);
 
         // Read the data from DB
         $user = User::where('email', $request->email)->first();
@@ -40,7 +40,7 @@ class ForgetPasswordController extends MailController
         $user->save();
 
         // Return the response
-        return $this->sendResponseMessage('code sent success', 200);
+        return $this->sendResponseMessage('Code has been sent', 200);
     }
 
     // THIS METHOD IS FOR CHECK FROM THE CODE IN THE FORGET PASSWORD
@@ -54,14 +54,14 @@ class ForgetPasswordController extends MailController
 
         // Check from any errors in the validation
         if($validator->fails())
-            return $this->sendResponseError('something went wrong', $validator->errors(), 400);
+            return $this->sendResponseError('Bad Request', $validator->errors(), 400);
 
         // Read the data from DB
         $user = User::where('email', $request->email)->first();
 
         // Check from the code is correct or not
         if($user->code_verify != $request->code)
-            return $this->sendResponseError('the code is incorrect', '', 406);
+            return $this->sendResponseMessage('Unauthorized', 401);
 
         // Check if the email address is verified, if no, then verify it
         if(!$user->email_verified_at) {
@@ -70,6 +70,6 @@ class ForgetPasswordController extends MailController
         }
 
         // Send the response
-        return $this->sendResponseMessage('verified success', 202);
+        return $this->sendResponseMessage('The code is correct', 200);
     }
 }

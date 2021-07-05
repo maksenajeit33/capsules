@@ -26,7 +26,7 @@ class ResetPAsswordController extends Controller
 
         // Check from any errors in the request
         if($validator->fails())
-            return $this->sendResponseError('something went wrong', $validator->errors(), 400);
+            return $this->sendResponseError('Bad Request', $validator->errors(), 400);
 
         // Read the data from DB
         $user = User::where('email', $request->email)->first();
@@ -40,7 +40,7 @@ class ResetPAsswordController extends Controller
         $result['token'] = $user->createToken('user@user')->accessToken;
 
         // Send the response
-        return $this->sendResponseData($result, 'password reset success', 202);
+        return $this->sendResponseData($result, 'Password has been reset', 200);
     }
 
     public function changetPassword(Request $request)
@@ -54,20 +54,20 @@ class ResetPAsswordController extends Controller
 
         // Check from any errors in the request
         if($validator->fails())
-            return $this->sendResponseError('something went wrong', $validator->errors(), 400);
+            return $this->sendResponseError('Bad Request', $validator->errors(), 400);
 
         // Read the data from DB
         $user = User::where('id', Auth::guard('api')->id())->first();
 
         // Check from the current password
         if(!Hash::check($request->old_password, $user->password))
-            return $this->sendResponseError('password is incorrect', '', 406);
+            return $this->sendResponseMessage('Unauthorized', 401);
 
         // Change the password
         $user->password = Hash::make($request->new_password);
         $user->save();
 
         // Send the response
-        return $this->sendResponseMessage('password change success', 202);
+        return $this->sendResponseMessage('Password has been change', 200);
     }
 }

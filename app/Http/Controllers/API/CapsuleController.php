@@ -25,7 +25,7 @@ class CapsuleController extends Controller
 
         // Check for any errors in the request
         if($validator->fails())
-            return $this->sendResponseError('Please validate the errors', $validator->errors(), 400);
+            return $this->sendResponseError('Bad Request', $validator->errors(), 400);
 
         // Get current time
         $date = Carbon::now()->format('Y/m/d');
@@ -47,7 +47,7 @@ class CapsuleController extends Controller
         $capsules->save();
 
         // Send response
-        return $this->sendResponseMessage('Increase added', 200);
+        return $this->sendResponseMessage('Increase has been added', 200);
     }
 
     // Create capsules count
@@ -62,7 +62,7 @@ class CapsuleController extends Controller
         Capsule::create($value);
 
         // Send response
-        return $this->sendResponseMessage('Increase added', 200);
+        return $this->sendResponseMessage('Increase has been added', 200);
     }
 
     // THE REPORT
@@ -92,13 +92,13 @@ class CapsuleController extends Controller
 
         // Return the response
         return response()->json([
-            'sum of today' => $reportDays['sumOfThisDay'],
-            'sum of yesterday' => $reportDays['sumOfLastDay'],
-            'sum of this week' => $reportWeeks['sumOfThisWeek'],
-            'sum of last week' => $reportWeeks['sumOfLastWeek'],
-            'sum of this month' => $reportMonths['sumOfThisMonth'],
-            'sum of last month' => $reportMonths['sumOfLastMonth'],
-        ]);
+            'today' => $reportDays['sumOfThisDay'],
+            'yesterday' => $reportDays['sumOfLastDay'],
+            'this week' => $reportWeeks['sumOfThisWeek'],
+            'last week' => $reportWeeks['sumOfLastWeek'],
+            'this month' => $reportMonths['sumOfThisMonth'],
+            'last month' => $reportMonths['sumOfLastMonth'],
+        ], 200);
     }
 
     // REPORT OF TODAY AND YESTERDAY

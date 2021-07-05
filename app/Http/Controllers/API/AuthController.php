@@ -70,6 +70,7 @@ class AuthController extends MailController
             return $this->sendResponseError('Unauthorized ', '', 401);
 
         // Create token
+        $result['id'] = $user->id;
         $result['name'] = $user->name;
         $result['token'] = $user->createToken('user@user')->accessToken;
 
@@ -78,8 +79,8 @@ class AuthController extends MailController
             $message = 'Login Successful';
             $code = 200;
         } else {
-            $message = 'Not Verified';
-            $code = 310;
+            $message = 'Forbidden';
+            $code = 403;
         }
 
         // Send the response
@@ -97,6 +98,6 @@ class AuthController extends MailController
         $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($request->user()->token()->id);
 
         // Send the response
-        return $this->sendResponseMessage('logout success', 200);
+        return $this->sendResponseMessage('Logout Successful', 200);
     }
 }

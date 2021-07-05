@@ -25,25 +25,25 @@ class VerificationController extends MailController
 
         // Check from any errors
         if($validator->fails())
-            return $this->sendResponseError('verification failed', $validator->errors(), 400);
+            return $this->sendResponseError('Bad Request', $validator->errors(), 400);
 
         // Read the data from DB
         $user = User::where('id', Auth::guard('api')->id())->first();
 
         // Check if the email is already verified
         if($user->email_verified_at)
-            return $this->sendResponseMessage('The email address has already been verified', 303);
+            return $this->sendResponseMessage('Already Reported', 208);
 
         // Check if the verification code is correct
         if($request->code != $user->code_verify)
-            return $this->sendResponseError('The code is incorrect', '', 406);
+            return $this->sendResponseMessage('Unauthorized ', 401);
 
         // Verify the email address
         $user->email_verified_at = Carbon::now();
         $user->save();
 
         // Send a message
-        return $this->sendResponseMessage('verification success', 202);
+        return $this->sendResponseMessage('Verified Successful', 200);
     }
 
     // SEND A VERIFICATION CODE
@@ -63,6 +63,6 @@ class VerificationController extends MailController
         $user->save();
 
         // Send a message
-        return $this->sendResponseMessage('code sent success', 200);
+        return $this->sendResponseMessage('Code has been sent', 200);
     }
 }

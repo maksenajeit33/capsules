@@ -36,6 +36,7 @@ class ResetPAsswordController extends Controller
         $user->save();
 
         // Create the token
+        $result['id'] = $user->id;
         $result['name'] = $user->name;
         $result['token'] = $user->createToken('user@user')->accessToken;
 

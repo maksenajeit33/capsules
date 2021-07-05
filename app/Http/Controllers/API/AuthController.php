@@ -27,7 +27,7 @@ class AuthController extends MailController
 
         // Check from errors in the validation
         if($validator->fails())
-            return $this->sendResponseError('register failed', $validator->errors(), 400);
+            return $this->sendResponseError('Bad Request', $validator->errors(), 400);
 
         // Get a generate number to send it in email and stored in DB
         $code = $this->generate();
@@ -37,6 +37,7 @@ class AuthController extends MailController
         $value['password'] = Hash::make($value['password']);
         $value['code_verify'] = $code;
         $user = User::create($value);
+        $result['id'] = $user->id;
         $result['name'] = $user->name;
         $result['token'] = $user->createToken('user@user')->accessToken;
 
@@ -44,7 +45,7 @@ class AuthController extends MailController
         $this->mailRegistrationVerify($user->name, $user->email, $code, $request->api_key);
 
         // Send the response
-        return $this->sendResponseData($result, 'register success', 202);
+        return $this->sendResponseData($result, 'Register Successful', 200);
     }
 
     // LOGIN USER
@@ -58,7 +59,7 @@ class AuthController extends MailController
 
         // Check from errors in the validation
         if($validator->fails())
-            return $this->sendResponseError('login failed', $validator->errors(), 400);
+            return $this->sendResponseError('Bad Request', $validator->errors(), 400);
 
         // Read the data from database
         $value = $request->all();
@@ -66,7 +67,7 @@ class AuthController extends MailController
 
         // Check from the password
         if(!Hash::check($value['password'], $user->password))
-            return $this->sendResponseError('login failed', '', 406);
+            return $this->sendResponseError('Unauthorized ', '', 401);
 
         // Create token
         $result['name'] = $user->name;
@@ -74,11 +75,11 @@ class AuthController extends MailController
 
         // Set a message to send it to user
         if($user->hasVerifiedEmail()) {
-            $message = 'login success';
-            $code = 202;
+            $message = 'Login Successful';
+            $code = 200;
         } else {
-            $message = 'email not verify';
-            $code = 403;
+            $message = 'Not Verified';
+            $code = 310;
         }
 
         // Send the response

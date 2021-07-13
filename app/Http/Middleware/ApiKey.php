@@ -16,8 +16,8 @@ class ApiKey
      */
     public function handle(Request $request, Closure $next)
     {
-        if($request->api_key != env("API_KEY_O") && $request->api_key != env("API_KEY_N"))
-            return response()->json(['message' => 'Unauthenticated.']);
+        if($request->api_key != "5c4e878thbg5n4j54ii7sx4q5xad4" && $request->api_key != "45reg4rhe54bgr4eryki58fqz5f5t")
+            return response()->json(['message' => 'Unauthenticated.'], 401);
 
         return $next($request);
     }

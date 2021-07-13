@@ -44,5 +44,14 @@ Route::prefix('v1/user')->namespace('API')->middleware('api_key')->group(functio
         // This route is for increase the number of capsules and get the report
         Route::post('capsules/plus', [CapsuleController::class, 'capsulesPlus']);
         Route::get('capsules/report', [CapsuleController::class, 'capsulesReport']);
+        // Return the info about user
+        Route::get('info', function (Request $request) {
+            $info = $request->user();
+            return response()->json([
+                'id' => $info['id'],
+                'name' => $info['name'],
+                'email' => $info['email'],
+            ]);
+        });
     });
 });

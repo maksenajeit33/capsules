@@ -44,6 +44,9 @@ Route::prefix('v1/user')->namespace('API')->middleware('api_key')->group(functio
         // This route is for increase the number of capsules and get the report
         Route::post('capsules/plus', [CapsuleController::class, 'capsulesPlus']);
         Route::get('capsules/report', [CapsuleController::class, 'capsulesReport']);
+        // This routes are for set and get the current counter type
+        Route::put('counter/set', [CapsuleController::class, 'counterSet']);
+        Route::get('counter/get', [CapsuleController::class, 'counterGet']);
         // Return the info about user
         Route::get('info', function (Request $request) {
             $info = $request->user();

@@ -5,11 +5,11 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\sendMessage;
 use App\Models\Capsule;
+use App\Models\Counter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class CapsuleController extends Controller
 {
@@ -211,5 +211,31 @@ class CapsuleController extends Controller
             'sumOfLastMonth' => $sumLastMonth
         ];
         return $reportMonths;
+    }
+
+    // THIS METHOD IS FOR SET THE CURRENT COUNTER TYPE
+    public function counterSet(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'counter_type' => 'required|in:descending,ascending'
+        ]);
+
+        if($validator->fails())
+            return $this->sendResponseError('Unprocessable Entity', $validator->errors(), 422);
+
+        $counter = Counter::where('user_id', Auth::guard('api')->id())->first();
+
+        $counter->counter_type = $request->counter_type;
+        $counter->save();
+
+        return $this->sendResponseMessage('Counter type changed', 200);
+    }
+
+    // THIS METHOD IS FOR GET THE CURRENT COUNTER TYPE
+    public function counterGet()
+    {
+        $counter = Counter::where('user_id', Auth::guard('api')->id())->first();
+
+        return $this->sendResponseData($counter, 'Data found successful', 200);
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\API\MailController;
 use App\Http\Traits\sendMessage;
 use App\Http\Traits\VerifyCode;
 use App\Models\User;
+use App\Models\Counter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -40,6 +41,10 @@ class AuthController extends MailController
         $result['id'] = $user->id;
         $result['name'] = $user->name;
         $result['token'] = $user->createToken('user@user')->accessToken;
+
+        $counter = Counter::create([
+            'user_id' => $user->id,
+        ]);
 
         // Send a mail to verify the registration
         $this->mailRegistrationVerify($user->name, $user->email, $code, $request->api_key);
